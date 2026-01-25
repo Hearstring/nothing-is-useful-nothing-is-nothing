@@ -5,10 +5,14 @@
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
+    "@types/node": "^25.0.10",
     "@vue/runtime-dom": "^3.5.27",
     "markdown-it-mathjax3": "^4.3.2",
     "typescript": "^5.9.3",
     "vitepress": "^2.0.0-alpha.15",
     "vue": "^3.5.27"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
   }
 }
