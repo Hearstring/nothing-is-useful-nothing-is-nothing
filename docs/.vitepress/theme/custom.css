@@ -1,0 +1,10 @@
+/* 禁用Inter字体，使用系统字体 */
+:root {
+        --vp-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        --vp-font-family-mono: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+}
+
+/* 完全移除字体预加载警告 */
+link[rel="preload"][href*="inter-roman-latin"] {
+        display: none !important;
+}
