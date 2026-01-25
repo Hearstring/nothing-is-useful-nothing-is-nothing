@@ -148,7 +148,54 @@ function generatePostsData() {
                         fs.mkdirSync(publicDir, { recursive: true })
                 }
 
-                // ... 其余代码 ...
+                if (!fs.existsSync(postsDir)) {
+                        console.log('📁 创建posts目录...')
+                        fs.mkdirSync(postsDir, { recursive: true })
+
+                        // 创建示例文章
+                        const examplePath = path.join(postsDir, '01-示例文章.md')
+                        fs.writeFileSync(examplePath, `---
+title: "示例文章"
+date: ${new Date().toISOString().split('T')[0]}
+---
+
+# 欢迎
+
+这是示例文章。`)
+                }
+
+                // 扫描文章
+                const posts = scanPostsRecursive(postsDir)
+
+                // 按时间戳排序
+                posts.sort((a, b) => b.timestamp - a.timestamp)
+
+                console.log(`✅ 找到 ${posts.length} 篇文章`)
+
+                // 验证数据
+                const validPosts = posts.filter(post => {
+                        // 确保时间戳有效
+                        if (!post.timestamp || post.timestamp < 100000000000) { // 早于2001年
+                                post.timestamp = Date.now()
+                                post.date = new Date().toLocaleDateString('zh-CN')
+                                post.relativeTime = '刚刚'
+                        }
+                        return true
+                })
+
+                // 保存数据文件
+                const dataPath = path.join(__dirname, '../public/posts-data.json')
+                fs.writeFileSync(dataPath, JSON.stringify(validPosts, null, 2))
+
+                console.log(`💾 数据文件已保存: ${dataPath}`)
+
+                // 在全局暴露数据
+                if (typeof window !== 'undefined') {
+                        window.postsData = validPosts
+                        console.log('🌐 数据已暴露到 window.postsData')
+                }
+
+                return validPosts
         } catch (error) {
                 console.error('❌ 生成数据文件失败:', error)
                 return []
