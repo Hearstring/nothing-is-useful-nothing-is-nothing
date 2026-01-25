@@ -68,7 +68,6 @@ function formatTitle(str) {
 export default defineConfig({
   title: "Where heart is?",
   description: "A site",
-  lastUpdated: true,
 
   markdown: {
     math: true,
@@ -102,5 +101,7 @@ export default defineConfig({
     search: {
       provider: 'local'
     },
+
+    lastUpdated: true,
   },
 })

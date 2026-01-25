@@ -1,6 +1,6 @@
 ---
-# docs/posts.md
 title: 文章列表
+lastUpdated: false
 ---
 
 # 📚 文章列表
