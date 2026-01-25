@@ -71,12 +71,29 @@ export default defineConfig({
 
   markdown: {
     math: true,
+    engine: 'katex',
+    katexOptions: {
+      // KaTeX 配置选项
+      strict: false,  // 设为 false 以允许更多 LaTeX 命令
+      throwOnError: false,  // 不抛出错误，渲染失败时显示原始文本
+    }
   },
 
   vite: {
     plugins: [postsDataPlugin],
     publicDir: '../public',
+    build: {
+      rollupOptions: {
+        external: ['katex'] // 确保 KaTeX 被正确处理
+      }
+    }
   },
+
+  // 添加 head 配置，确保 KaTeX CSS 正确加载
+  head: [
+    // KaTeX CSS（如果需要，VitePress 会自动添加）
+    // ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css' }]
+  ],
 
   build: {
   },

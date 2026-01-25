@@ -224,7 +224,7 @@ export default {
                 // 源文件路径（public 目录）
                 const sourceFile = path.join(__dirname, '../public/posts-data.json')
                 // 目标文件路径（dist 目录）
-                const distDir = path.join(__dirname, '../dist')
+                const distDir = path.join(__dirname, './dist')
                 const destFile = path.join(distDir, 'posts-data.json')
 
                 console.log(`📁 源文件: ${sourceFile}`)
