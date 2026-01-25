@@ -75,12 +75,10 @@ export default defineConfig({
 
   vite: {
     plugins: [postsDataPlugin],
+    publicDir: '../public',
+  },
 
-    server: {
-      fs: {
-        allow: ['..', '../..']
-      }
-    }
+  build: {
   },
 
   themeConfig: {

@@ -110,7 +110,7 @@ export default {
 			this.error = null
 
 			try {
-				const response = await fetch('/.vitepress/posts-data.json')
+				const response = await fetch('/posts-data.json')
 
 				if (response.ok) {
 					const data = await response.json()

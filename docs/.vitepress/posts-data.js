@@ -178,7 +178,7 @@ date: ${new Date().toISOString().split('T')[0]}
                 })
 
                 // 保存数据文件
-                const dataPath = path.join(__dirname, 'posts-data.json')
+                const dataPath = path.join(__dirname, '../public/posts-data.json')
                 fs.writeFileSync(dataPath, JSON.stringify(validPosts, null, 2))
 
                 console.log(`💾 数据文件已保存: ${dataPath}`)
@@ -201,28 +201,55 @@ console.log('🚀 开始生成文章数据...')
 const posts = generatePostsData()
 console.log('🎯 数据生成完成')
 
-// 修复：使用默认导出而不是命名导出
+// 在 export default 对象中添加 closeBundle 方法
 export default {
         name: 'postsDataPlugin',
 
         configureServer(server) {
-                console.log('🌐 开发服务器配置完成')
-                generatePostsData()
-
-                // 监听文件变化
-                const postsDir = path.join(process.cwd(), 'docs/posts')
-                if (fs.existsSync(postsDir)) {
-                        server.watcher.on('change', (filePath) => {
-                                if (filePath.includes('docs/posts') && filePath.endsWith('.md')) {
-                                        console.log('🔄 文件变化，重新生成数据...')
-                                        generatePostsData()
-                                }
-                        })
-                }
+                // ... 现有代码 ...
         },
 
         buildStart() {
                 console.log('🔨 构建开始...')
                 generatePostsData()
+        },
+
+        // 添加这个钩子：构建结束时执行
+        closeBundle() {
+                console.log('📦 构建结束，复制数据文件到 dist 目录...')
+
+                const fs = require('fs')
+                const path = require('path')
+
+                // 源文件路径（public 目录）
+                const sourceFile = path.join(__dirname, '../public/posts-data.json')
+                // 目标文件路径（dist 目录）
+                const distDir = path.join(__dirname, '../dist')
+                const destFile = path.join(distDir, 'posts-data.json')
+
+                console.log(`📁 源文件: ${sourceFile}`)
+                console.log(`📁 目标目录: ${distDir}`)
+
+                // 确保 dist 目录存在
+                if (!fs.existsSync(distDir)) {
+                        fs.mkdirSync(distDir, { recursive: true })
+                        console.log('✅ 创建 dist 目录')
+                }
+
+                // 检查源文件是否存在并复制
+                if (fs.existsSync(sourceFile)) {
+                        fs.copyFileSync(sourceFile, destFile)
+                        console.log(`✅ 已复制数据文件到: ${destFile}`)
+
+                        // 验证复制成功
+                        if (fs.existsSync(destFile)) {
+                                const stats = fs.statSync(destFile)
+                                const data = JSON.parse(fs.readFileSync(destFile, 'utf8'))
+                                console.log(`📊 文件大小: ${stats.size} 字节`)
+                                console.log(`📝 包含文章数: ${data.length || data.posts?.length || 0}`)
+                        }
+                } else {
+                        console.log('❌ 源文件不存在，无法复制')
+                }
         }
 }
