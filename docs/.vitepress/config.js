@@ -4,6 +4,7 @@ import { join, relative, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import postsDataPlugin from './posts-data.js'
 import mathjax3 from 'markdown-it-mathjax3';
+import fontFixPlugin from './plugins/font-fix.js'
 
 const customElements = [
   'mjx-container',
@@ -144,7 +145,7 @@ export default defineConfig({
   ],
 
   vite: {
-    plugins: [postsDataPlugin],
+    plugins: [postsDataPlugin, fontFixPlugin],
     publicDir: '../public',
   },
 
