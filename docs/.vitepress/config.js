@@ -120,6 +120,7 @@ export default defineConfig({
       md.use(mathjax3);
     },
   },
+
   vue: {
     template: {
       compilerOptions: {
@@ -128,6 +129,19 @@ export default defineConfig({
       },
     },
   },
+
+  // 禁用VitePress的字体预加载
+  head: [
+    // 移除Inter字体预加载
+    ['link', {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
+    }],
+    ['link', {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Fira+Code&display=swap'
+    }]
+  ],
 
   vite: {
     plugins: [postsDataPlugin],
