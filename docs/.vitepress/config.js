@@ -3,6 +3,52 @@ import { readdirSync, statSync } from 'fs'
 import { join, relative, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import postsDataPlugin from './posts-data.js'
+import mathjax3 from 'markdown-it-mathjax3';
+
+const customElements = [
+  'mjx-container',
+  'mjx-assistive-mml',
+  'math',
+  'maction',
+  'maligngroup',
+  'malignmark',
+  'menclose',
+  'merror',
+  'mfenced',
+  'mfrac',
+  'mi',
+  'mlongdiv',
+  'mmultiscripts',
+  'mn',
+  'mo',
+  'mover',
+  'mpadded',
+  'mphantom',
+  'mroot',
+  'mrow',
+  'ms',
+  'mscarries',
+  'mscarry',
+  'msgroup',
+  'msline',
+  'msrow',
+  'mspace',
+  'msqrt',
+  'mstack',
+  'mstyle',
+  'msub',
+  'msup',
+  'msubsup',
+  'mtable',
+  'mtd',
+  'mtext',
+  'mtr',
+  'munder',
+  'munderover',
+  'semantics',
+  'annotation',
+  'annotation-xml',
+];
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -70,30 +116,23 @@ export default defineConfig({
   description: "A site",
 
   markdown: {
-    math: true,
-    engine: 'katex',
-    katexOptions: {
-      // KaTeX 配置选项
-      strict: false,  // 设为 false 以允许更多 LaTeX 命令
-      throwOnError: false,  // 不抛出错误，渲染失败时显示原始文本
-    }
+    config: (md) => {
+      md.use(mathjax3);
+    },
+  },
+  vue: {
+    template: {
+      compilerOptions: {
+        // 让 Vue 识别 MathJax 生成的自定义标签
+        isCustomElement: (tag) => customElements.includes(tag),
+      },
+    },
   },
 
   vite: {
     plugins: [postsDataPlugin],
     publicDir: '../public',
-    build: {
-      rollupOptions: {
-        external: ['katex'] // 确保 KaTeX 被正确处理
-      }
-    }
   },
-
-  // 添加 head 配置，确保 KaTeX CSS 正确加载
-  head: [
-    // KaTeX CSS（如果需要，VitePress 会自动添加）
-    // ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css' }]
-  ],
 
   build: {
   },
